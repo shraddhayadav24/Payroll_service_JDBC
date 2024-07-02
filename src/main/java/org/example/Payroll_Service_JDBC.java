@@ -9,7 +9,7 @@ public class Payroll_Service_JDBC {
    String username="root";
    String password="root";
    String query = "select * from employee_payroll";
-   String UpdateQuery = "update employee_payroll set salary = 25000 where name = 'Shardul'";
+   String UpdateQuery = "update employee_payroll set salary = ? where name = ?";
 
  {
 
@@ -17,18 +17,18 @@ public class Payroll_Service_JDBC {
          Class.forName("com.mysql.cj.jdbc.Driver");
         Connection connection=DriverManager.getConnection(url,username,password);
 
-            Statement statement = connection.createStatement();
 
 
-          int rowsUpdated = statement.executeUpdate(UpdateQuery);
 
-          if (rowsUpdated > 0) {
-              System.out.println("Salary updated successfully for employee: " );
-          } else {
-              System.out.println("No employee found: ");
-          }
+          PreparedStatement preparedStatement = connection.prepareStatement(UpdateQuery);
+          preparedStatement.setDouble(1,30000.0);
+          preparedStatement.setString(2,"Shardul");
+          preparedStatement.executeUpdate();
+          System.out.println("Salary is updated");
 
-            ResultSet resultSet =  statement.executeQuery(query);
+
+
+            ResultSet resultSet =  preparedStatement.executeQuery(query);
 
          while(resultSet.next()) {
              int id =  resultSet.getInt("id");
